@@ -4,10 +4,9 @@ import io
 from pathlib import Path
 
 import markdown
-from fastapi import FastAPI, HTTPException, Response
+from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from weasyprint import HTML, CSS
+from weasyprint import HTML
 
 app = FastAPI(
     title="MD2PDF",
@@ -25,13 +24,6 @@ app.add_middleware(
 
 STATIC_DIR = Path(__file__).parent / "static"
 GITHUB_CSS_PATH = STATIC_DIR / "github.css"
-
-
-class MarkdownRequest(BaseModel):
-    """Request model for markdown conversion."""
-
-    markdown: str
-    filename: str | None = "document.pdf"
 
 
 def get_github_css() -> str:
@@ -106,7 +98,7 @@ async def root():
         "description": "Markdown to PDF converter with GitHub-style rendering",
         "version": "1.0.0",
         "endpoints": {
-            "POST /convert": "Convert markdown to PDF",
+            "POST /convert": "Convert markdown to PDF (raw text body, optional ?filename=)",
             "GET /health": "Health check",
         },
     }
@@ -119,25 +111,27 @@ async def health():
 
 
 @app.post("/convert")
-async def convert_markdown_to_pdf(request: MarkdownRequest):
+async def convert_markdown_to_pdf(request: Request, filename: str = "document.pdf"):
     """Convert markdown text to a PDF document.
 
-    Args:
-        request: MarkdownRequest with markdown content and optional filename
+    Accepts raw markdown text in the request body.
+    Optional query parameter: filename (default: document.pdf)
 
     Returns:
         PDF file as response
     """
-    if not request.markdown.strip():
+    body = await request.body()
+    md_content = body.decode("utf-8")
+
+    if not md_content.strip():
         raise HTTPException(status_code=400, detail="Markdown content cannot be empty")
 
     try:
         css = get_github_css()
-        html_body = markdown_to_html(request.markdown)
+        html_body = markdown_to_html(md_content)
         html_document = create_html_document(html_body, css)
         pdf_bytes = html_to_pdf(html_document)
 
-        filename = request.filename or "document.pdf"
         if not filename.endswith(".pdf"):
             filename += ".pdf"
 

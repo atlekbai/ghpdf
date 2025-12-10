@@ -35,16 +35,10 @@ The server will start at `http://localhost:8000`.
 
 #### `POST /convert`
 
-Convert markdown to PDF.
+Convert markdown to PDF. Send raw markdown text in the request body.
 
-**Request:**
-
-```json
-{
-  "markdown": "# Hello World\n\nThis is **bold** text.",
-  "filename": "output.pdf"
-}
-```
+**Query Parameters:**
+- `filename` (optional): Output filename (default: `document.pdf`)
 
 **Response:** PDF file download
 
@@ -59,9 +53,19 @@ API information.
 ### Example with curl
 
 ```bash
+# Simple conversion
 curl -X POST http://localhost:8000/convert \
-  -H "Content-Type: application/json" \
-  -d '{"markdown": "# Hello\n\nWorld"}' \
+  --data-binary "# Hello World" \
+  --output document.pdf
+
+# With custom filename
+curl -X POST "http://localhost:8000/convert?filename=my-doc.pdf" \
+  --data-binary @README.md \
+  --output my-doc.pdf
+
+# From stdin
+echo "# Hello" | curl -X POST http://localhost:8000/convert \
+  --data-binary @- \
   --output document.pdf
 ```
 
@@ -94,7 +98,8 @@ def hello():
 
 response = requests.post(
     "http://localhost:8000/convert",
-    json={"markdown": markdown_content, "filename": "my-document.pdf"}
+    data=markdown_content,
+    params={"filename": "my-document.pdf"}
 )
 
 with open("my-document.pdf", "wb") as f:
