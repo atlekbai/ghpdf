@@ -39,6 +39,18 @@ PAGE_BREAK_PATTERN = re.compile(
 )
 PAGE_BREAK_HTML = '<div class="pagebreak"></div>'
 
+# CSS for page numbers
+PAGE_NUMBERS_CSS = """
+@page {
+    @bottom-center {
+        content: counter(page);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        font-size: 11px;
+        color: #656d76;
+    }
+}
+"""
+
 
 def preprocess_pagebreaks(md_content: str) -> str:
     """Convert page break markers to HTML."""
@@ -82,8 +94,9 @@ def markdown_to_html(md_content: str) -> str:
     return html_body
 
 
-def create_html_document(body: str, css: str) -> str:
+def create_html_document(body: str, css: str, page_numbers: bool = False) -> str:
     """Create a complete HTML document with styling."""
+    extra_css = PAGE_NUMBERS_CSS if page_numbers else ""
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -91,6 +104,7 @@ def create_html_document(body: str, css: str) -> str:
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
 {css}
+{extra_css}
     </style>
 </head>
 <body>
@@ -115,7 +129,7 @@ async def root():
         "description": "Markdown to PDF converter with GitHub-style rendering",
         "version": "1.0.0",
         "endpoints": {
-            "POST /convert": "Convert markdown to PDF (raw text body, optional ?filename=)",
+            "POST /convert": "Convert markdown to PDF (raw text body, ?filename=, ?page_numbers=true)",
             "GET /health": "Health check",
         },
     }
@@ -128,11 +142,17 @@ async def health():
 
 
 @app.post("/convert")
-async def convert_markdown_to_pdf(request: Request, filename: str = "document.pdf"):
+async def convert_markdown_to_pdf(
+    request: Request,
+    filename: str = "document.pdf",
+    page_numbers: bool = False,
+):
     """Convert markdown text to a PDF document.
 
     Accepts raw markdown text in the request body.
-    Optional query parameter: filename (default: document.pdf)
+    Optional query parameters:
+        - filename: Output filename (default: document.pdf)
+        - page_numbers: Add page numbers at bottom center (default: false)
 
     Returns:
         PDF file as response
@@ -146,7 +166,7 @@ async def convert_markdown_to_pdf(request: Request, filename: str = "document.pd
     try:
         css = get_github_css()
         html_body = markdown_to_html(md_content)
-        html_document = create_html_document(html_body, css)
+        html_document = create_html_document(html_body, css, page_numbers=page_numbers)
         pdf_bytes = html_to_pdf(html_document)
 
         if not filename.endswith(".pdf"):

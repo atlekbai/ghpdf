@@ -8,6 +8,7 @@ Markdown to PDF converter with GitHub-style rendering.
 - Syntax highlighting for code blocks
 - Support for tables, task lists, footnotes, and more
 - Page break support for multi-page documents
+- Optional page numbers
 - REST API for easy integration
 
 ## Installation
@@ -40,6 +41,7 @@ Convert markdown to PDF. Send raw markdown text in the request body.
 
 **Query Parameters:**
 - `filename` (optional): Output filename (default: `document.pdf`)
+- `page_numbers` (optional): Add page numbers at bottom center (default: `false`)
 
 **Response:** PDF file download
 
@@ -67,6 +69,11 @@ curl -X POST "http://localhost:8000/convert?filename=my-doc.pdf" \
 # From stdin
 echo "# Hello" | curl -X POST http://localhost:8000/convert \
   --data-binary @- \
+  --output document.pdf
+
+# With page numbers
+curl -X POST "http://localhost:8000/convert?page_numbers=true" \
+  --data-binary @README.md \
   --output document.pdf
 ```
 
