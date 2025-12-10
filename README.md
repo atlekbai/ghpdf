@@ -79,7 +79,7 @@ curl -X POST "http://localhost:8000/convert?page_numbers=true" \
 
 ### Example with Python
 
-```python
+````python
 import requests
 
 markdown_content = """
@@ -112,7 +112,7 @@ response = requests.post(
 
 with open("my-document.pdf", "wb") as f:
     f.write(response.content)
-```
+````
 
 ## Supported Markdown Features
 
