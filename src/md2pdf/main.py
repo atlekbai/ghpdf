@@ -1,6 +1,7 @@
 """FastAPI server for Markdown to PDF conversion."""
 
 import io
+import re
 from pathlib import Path
 
 import markdown
@@ -31,8 +32,24 @@ def get_github_css() -> str:
     return GITHUB_CSS_PATH.read_text()
 
 
+# Page break marker pattern - matches various formats
+PAGE_BREAK_PATTERN = re.compile(
+    r"^(?:---\s*pagebreak\s*---|<!--\s*pagebreak\s*-->|\\pagebreak)\s*$",
+    re.MULTILINE | re.IGNORECASE,
+)
+PAGE_BREAK_HTML = '<div class="pagebreak"></div>'
+
+
+def preprocess_pagebreaks(md_content: str) -> str:
+    """Convert page break markers to HTML."""
+    return PAGE_BREAK_PATTERN.sub(PAGE_BREAK_HTML, md_content)
+
+
 def markdown_to_html(md_content: str) -> str:
     """Convert markdown to HTML with extensions."""
+    # Preprocess page breaks before markdown conversion
+    md_content = preprocess_pagebreaks(md_content)
+
     extensions = [
         "markdown.extensions.fenced_code",
         "markdown.extensions.codehilite",

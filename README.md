@@ -7,6 +7,7 @@ Markdown to PDF converter with GitHub-style rendering.
 - Convert Markdown to PDF with GitHub-flavored styling
 - Syntax highlighting for code blocks
 - Support for tables, task lists, footnotes, and more
+- Page break support for multi-page documents
 - REST API for easy integration
 
 ## Installation
@@ -123,6 +124,23 @@ with open("my-document.pdf", "wb") as f:
 - Definition lists
 - Abbreviations
 - Admonitions
+- Page breaks
+
+### Page Breaks
+
+Insert page breaks using any of these formats:
+
+```markdown
+---pagebreak---
+```
+
+```markdown
+<!-- pagebreak -->
+```
+
+```markdown
+\pagebreak
+```
 
 ## Development
 
