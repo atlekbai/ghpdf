@@ -2,14 +2,16 @@
 
 A CLI tool to convert Markdown files to PDF with GitHub-style rendering.
 
-<img src="https://github.com/user-attachments/assets/94126b34-0ef5-4f1c-8e69-de8e4d22f3ce" alt="Sample PDF output" width="400">
-
 ## Why
 
-- **GitHub styling** - PDFs look exactly like GitHub renders Markdown
-- **Simple** - No config, no LaTeX, no templates. Just `pip install` and go
-- **Curl-like flags** - Familiar `-o` and `-O` flags for output control
-- **Wildcards** - Bulk convert with `ghpdf *.md -O`
+|                     |                                                              |
+| ------------------- | ------------------------------------------------------------ |
+| **GitHub styling**  | PDFs look exactly like GitHub renders Markdown               |
+| **Simple**          | No config, no LaTeX, no templates. Just `pip install` and go |
+| **Curl-like flags** | Familiar `-o` and `-O` flags for output control              |
+| **Wildcards**       | Bulk convert with `ghpdf *.md -O`                            |
+
+<img src="https://github.com/user-attachments/assets/94126b34-0ef5-4f1c-8e69-de8e4d22f3ce" alt="Sample PDF output" width="400">
 
 ## Installation
 
