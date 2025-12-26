@@ -4,7 +4,7 @@ A CLI tool to convert Markdown files to PDF with GitHub-style rendering.
 
 ## Why
 
-|                     |                                                              |
+| Feature             | Description                                                  |
 | ------------------- | ------------------------------------------------------------ |
 | **GitHub styling**  | PDFs look exactly like GitHub renders Markdown               |
 | **Simple**          | No config, no LaTeX, no templates. Just `pip install` and go |
