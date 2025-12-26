@@ -2,6 +2,8 @@
 
 A CLI tool to convert Markdown files to PDF with GitHub-style rendering.
 
+<img src="https://github.com/user-attachments/assets/94126b34-0ef5-4f1c-8e69-de8e4d22f3ce" alt="Sample PDF output" width="400">
+
 ## Installation
 
 ```bash
