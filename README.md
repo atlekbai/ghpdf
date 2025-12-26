@@ -9,7 +9,8 @@ Markdown to PDF converter with GitHub-style rendering.
 - Support for tables, task lists, footnotes, and more
 - Page break support for multi-page documents
 - Optional page numbers
-- REST API for easy integration
+- Bulk conversion support
+- Stdin/stdout piping
 
 ## Installation
 
@@ -19,100 +20,44 @@ uv sync
 
 ## Usage
 
-### Start the server
-
 ```bash
-uv run md2pdf
+md2pdf [OPTIONS] [FILES]...
 ```
 
-Or directly with uvicorn:
+### Options
+
+| Flag | Long             | Description                                 |
+| ---- | ---------------- | ------------------------------------------- |
+| `-o` | `--output`       | Output filename (single file or stdin only) |
+| `-O` | `--remote-name`  | Auto-name output (input.md → input.pdf)     |
+| `-n` | `--page-numbers` | Add page numbers at bottom center           |
+| `-q` | `--quiet`        | Suppress progress output                    |
+| `-V` | `--version`      | Show version and exit                       |
+
+### Examples
 
 ```bash
-uv run uvicorn md2pdf.main:app --reload
-```
+# Single file with explicit output
+md2pdf README.md -o documentation.pdf
 
-The server will start at `http://localhost:8000`.
+# Auto-name output (README.md → README.pdf)
+md2pdf README.md -O
 
-### API Endpoints
-
-#### `POST /convert`
-
-Convert markdown to PDF. Send raw markdown text in the request body.
-
-**Query Parameters:**
-- `filename` (optional): Output filename (default: `document.pdf`)
-- `page_numbers` (optional): Add page numbers at bottom center (default: `false`)
-
-**Response:** PDF file download
-
-#### `GET /health`
-
-Health check endpoint.
-
-#### `GET /`
-
-API information.
-
-### Example with curl
-
-```bash
-# Simple conversion
-curl -X POST http://localhost:8000/convert \
-  --data-binary "# Hello World" \
-  --output document.pdf
-
-# With custom filename
-curl -X POST "http://localhost:8000/convert?filename=my-doc.pdf" \
-  --data-binary @README.md \
-  --output my-doc.pdf
-
-# From stdin
-echo "# Hello" | curl -X POST http://localhost:8000/convert \
-  --data-binary @- \
-  --output document.pdf
+# Bulk convert all markdown files
+md2pdf *.md -O
 
 # With page numbers
-curl -X POST "http://localhost:8000/convert?page_numbers=true" \
-  --data-binary @README.md \
-  --output document.pdf
+md2pdf report.md -O -n
+
+# Stdin to file
+echo "# Hello World" | md2pdf -o hello.pdf
+
+# Stdin to stdout (for piping)
+cat document.md | md2pdf > output.pdf
+
+# Quiet mode for scripting
+md2pdf *.md -O -q
 ```
-
-### Example with Python
-
-````python
-import requests
-
-markdown_content = """
-# My Document
-
-## Introduction
-
-This is a **sample** markdown document with:
-
-- Lists
-- Code blocks
-- Tables
-
-```python
-def hello():
-    print("Hello, World!")
-```
-
-| Name | Value |
-|------|-------|
-| A    | 1     |
-| B    | 2     |
-"""
-
-response = requests.post(
-    "http://localhost:8000/convert",
-    data=markdown_content,
-    params={"filename": "my-document.pdf"}
-)
-
-with open("my-document.pdf", "wb") as f:
-    f.write(response.content)
-````
 
 ## Supported Markdown Features
 
