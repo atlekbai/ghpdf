@@ -1,4 +1,4 @@
-"""CLI interface for md2pdf using Typer."""
+"""CLI interface for ghpdf using Typer."""
 
 import sys
 from pathlib import Path
@@ -7,11 +7,11 @@ from typing import Annotated, Optional
 import typer
 from rich.console import Console
 
-from md2pdf import __version__
-from md2pdf.converter import convert
+from ghpdf import __version__
+from ghpdf.converter import convert
 
 app = typer.Typer(
-    name="md2pdf",
+    name="ghpdf",
     help="Convert Markdown files to PDF with GitHub-style rendering.",
     add_completion=False,
     no_args_is_help=False,
@@ -23,7 +23,7 @@ console = Console(stderr=True)
 def version_callback(value: bool) -> None:
     """Print version and exit."""
     if value:
-        print(f"md2pdf {__version__}")
+        print(f"ghpdf {__version__}")
         raise typer.Exit()
 
 
@@ -120,15 +120,15 @@ def main(
 
     Examples:
 
-        md2pdf README.md -o docs.pdf      Single file, explicit output
+        ghpdf README.md -o docs.pdf      Single file, explicit output
 
-        md2pdf README.md -O               Auto-name: README.pdf
+        ghpdf README.md -O               Auto-name: README.pdf
 
-        md2pdf *.md -O                    Bulk convert all .md files
+        ghpdf *.md -O                    Bulk convert all .md files
 
-        cat doc.md | md2pdf > out.pdf     Stdin to stdout
+        cat doc.md | ghpdf > out.pdf     Stdin to stdout
 
-        cat doc.md | md2pdf -o out.pdf    Stdin to file
+        cat doc.md | ghpdf -o out.pdf    Stdin to file
     """
     input_files = files or []
 
@@ -149,7 +149,7 @@ def main(
             console.print(
                 "[red]Error:[/red] No input files provided and no data on stdin."
             )
-            console.print("Run 'md2pdf --help' for usage information.")
+            console.print("Run 'ghpdf --help' for usage information.")
             raise typer.Exit(code=1)
 
         if remote_name:

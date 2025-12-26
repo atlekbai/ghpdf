@@ -1,4 +1,4 @@
-"""Core conversion functions for md2pdf."""
+"""Core conversion functions for ghpdf."""
 
 import io
 import re

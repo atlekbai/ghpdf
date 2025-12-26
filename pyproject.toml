@@ -1,9 +1,20 @@
 [project]
-name = "md2pdf"
+name = "ghpdf"
 version = "1.0.0"
 description = "Markdown to PDF converter with GitHub-style rendering"
 readme = "README.md"
 requires-python = ">=3.11"
+authors = [{ name = "atlekbai" }]
+license = { text = "MIT" }
+keywords = ["markdown", "pdf", "converter", "cli"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Text Processing :: Markup :: Markdown",
+]
+
 dependencies = [
     "markdown>=3.7",
     "weasyprint>=62.0",
@@ -11,15 +22,19 @@ dependencies = [
     "typer>=0.12.0",
 ]
 
+[project.urls]
+Homepage = "https://github.com/atlekbai/md2pdf"
+Repository = "https://github.com/atlekbai/md2pdf"
+
 [project.scripts]
-md2pdf = "md2pdf.cli:app"
+ghpdf = "ghpdf.cli:app"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/md2pdf"]
+packages = ["src/ghpdf"]
 
 [dependency-groups]
 dev = [

@@ -1,27 +1,33 @@
-# MD2PDF
+# ghpdf
 
-Markdown to PDF converter with GitHub-style rendering.
-
-## Features
-
-- Convert Markdown to PDF with GitHub-flavored styling
-- Syntax highlighting for code blocks
-- Support for tables, task lists, footnotes, and more
-- Page break support for multi-page documents
-- Optional page numbers
-- Bulk conversion support
-- Stdin/stdout piping
+A CLI tool to convert Markdown files to PDF with GitHub-style rendering.
 
 ## Installation
 
 ```bash
-uv sync
+pip install ghpdf
+```
+
+Or with [pipx](https://pipx.pypa.io/) (recommended for CLI tools):
+
+```bash
+pipx install ghpdf
+```
+
+## Quick Start
+
+```bash
+# Convert a file
+ghpdf README.md -o output.pdf
+
+# Auto-name output (README.md → README.pdf)
+ghpdf README.md -O
 ```
 
 ## Usage
 
 ```bash
-md2pdf [OPTIONS] [FILES]...
+ghpdf [OPTIONS] [FILES]...
 ```
 
 ### Options
@@ -38,68 +44,49 @@ md2pdf [OPTIONS] [FILES]...
 
 ```bash
 # Single file with explicit output
-md2pdf README.md -o documentation.pdf
+ghpdf README.md -o documentation.pdf
 
 # Auto-name output (README.md → README.pdf)
-md2pdf README.md -O
+ghpdf README.md -O
 
 # Bulk convert all markdown files
-md2pdf *.md -O
+ghpdf *.md -O
 
 # With page numbers
-md2pdf report.md -O -n
+ghpdf report.md -O -n
 
 # Stdin to file
-echo "# Hello World" | md2pdf -o hello.pdf
+echo "# Hello World" | ghpdf -o hello.pdf
 
 # Stdin to stdout (for piping)
-cat document.md | md2pdf > output.pdf
+cat document.md | ghpdf > output.pdf
 
 # Quiet mode for scripting
-md2pdf *.md -O -q
+ghpdf *.md -O -q
 ```
 
-## Supported Markdown Features
+## Features
 
-- Headings (h1-h6)
-- Bold, italic, strikethrough
-- Lists (ordered, unordered, nested)
-- Task lists
-- Code blocks with syntax highlighting
-- Inline code
-- Tables
-- Blockquotes
-- Horizontal rules
-- Links
-- Images
-- Footnotes
-- Definition lists
-- Abbreviations
-- Admonitions
-- Page breaks
+- GitHub-flavored markdown styling
+- Syntax highlighting for code blocks
+- Tables, task lists, footnotes, and more
+- Page break support
+- Optional page numbers
+- Bulk conversion
+- Stdin/stdout piping
+
+### Supported Markdown
+
+Headings, bold, italic, strikethrough, lists, task lists, code blocks, inline code, tables, blockquotes, horizontal rules, links, images, footnotes, definition lists, abbreviations, and admonitions.
 
 ### Page Breaks
 
 Insert page breaks using any of these formats:
 
-```markdown
+```
 ---pagebreak---
-```
-
-```markdown
 <!-- pagebreak -->
-```
-
-```markdown
 \pagebreak
-```
-
-## Development
-
-### Run tests
-
-```bash
-uv run pytest
 ```
 
 ## License
