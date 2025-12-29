@@ -15,6 +15,30 @@ A CLI tool to convert Markdown files to PDF with GitHub-style rendering.
 
 ## Installation
 
+<details>
+<summary><strong>Prerequisites</strong> (system libraries required by WeasyPrint)</summary>
+
+**macOS** (Homebrew):
+```bash
+brew install pango
+```
+
+**Ubuntu/Debian**:
+```bash
+sudo apt install libpango-1.0-0 libpangocairo-1.0-0
+```
+
+**Fedora**:
+```bash
+sudo dnf install pango
+```
+
+**Windows**: See [WeasyPrint Windows installation](https://doc.courtbouillon.org/weasyprint/stable/first_steps.html#windows)
+
+</details>
+
+### Install ghpdf
+
 ```bash
 pip install ghpdf
 ```
